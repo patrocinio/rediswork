@@ -1,0 +1,141 @@
+version: "2"
+
+services:
+  9498-gssp-redis-master:
+    image: 169.46.44.168/9498-gssp/redis-master
+    restart: always
+    labels:
+      service.name: "gssp.redis"
+    environment:
+      - affinity:service.name!=gssp.redis
+    networks:
+      9498-gssp-ol-web:
+        aliases:
+          - redis-master
+
+  9498-gssp-redis-slave1:
+    image: 169.46.44.168/9498-gssp/redis-slave
+    depends_on:
+        - 9498-gssp-redis-master
+    restart: always
+    labels:
+      service.name: "gssp.redis"
+    environment:
+      - affinity:service.name!=gssp.redis
+    networks:
+      9498-gssp-ol-web:
+        aliases:
+          - redis-slave1
+
+  9498-gssp-redis-slave2:
+    image: 169.46.44.168/9498-gssp/redis-slave
+    depends_on:
+        - 9498-gssp-redis-master
+    restart: always
+    labels:
+      service.name: "gssp.redis"
+    environment:
+      - affinity:service.name!=gssp.redis
+    networks:
+      9498-gssp-ol-web:
+        aliases:
+          - redis-slave2
+
+  9498-gssp-redis-sentinel1:
+    image: 169.46.44.168/9498-gssp/redis-sentinel
+    depends_on:
+        - 9498-gssp-redis-master
+    restart: always
+    labels:
+      service.name: "gssp.sentinel"
+    environment:
+      - affinity:service.name!=gssp.sentinel
+    networks:
+      9498-gssp-ol-web:
+
+  9498-gssp-redis-sentinel2:
+    image: 169.46.44.168/9498-gssp/redis-sentinel
+    depends_on:
+        - 9498-gssp-redis-master
+    restart: always
+    labels:
+      service.name: "gssp.sentinel"
+    environment:
+      - affinity:service.name!=gssp.sentinel
+    networks:
+      9498-gssp-ol-web:
+
+  9498-gssp-redis-sentinel3:
+    image: 169.46.44.168/9498-gssp/redis-sentinel
+    depends_on:
+        - 9498-gssp-redis-master
+    restart: always
+    labels:
+      service.name: "gssp.sentinel"
+    environment:
+      - affinity:service.name!=gssp.sentinel
+    networks:
+      9498-gssp-ol-web:
+
+  9498-gssp-redis-haproxy1:
+    image: 169.46.44.168/9498-gssp/redis-haproxy
+    depends_on:
+        - 9498-gssp-redis-master
+    ports:
+       - "6379:6379"
+    restart: always
+    labels:
+      service.name: "gssp.redisproxy"
+    environment:
+      - affinity:service.name!=gssp.redisproxy
+    networks:
+      9498-gssp-ol-web:
+        aliases:
+          - redis
+      9498-gssp-ol-app:
+        aliases:
+          - redis
+
+  9498-gssp-redis-haproxy2:
+    image: 169.46.44.168/9498-gssp/redis-haproxy
+    depends_on:
+        - 9498-gssp-redis-master
+    ports:
+       - "6379:6379"
+    restart: always
+    labels:
+      service.name: "gssp.redisproxy"
+    environment:
+      - affinity:service.name!=gssp.redisproxy
+    networks:
+      9498-gssp-ol-web:
+        aliases:
+          - redis
+      9498-gssp-ol-app:
+        aliases:
+          - redis
+
+  9498-gssp-redis-haproxy3:
+    image: 169.46.44.168/9498-gssp/redis-haproxy
+    depends_on:
+        - 9498-gssp-redis-master
+    ports:
+       - "6379:6379"
+    restart: always
+    labels:
+      service.name: "gssp.redisproxy"
+    environment:
+      - affinity:service.name!=gssp.redisproxy
+    networks:
+      9498-gssp-ol-web:
+        aliases:
+          - redis
+      9498-gssp-ol-app:
+        aliases:
+          - redis
+
+networks:
+  9498-gssp-ol-web:
+    external: true
+  9498-gssp-ol-app:
+    external: true
